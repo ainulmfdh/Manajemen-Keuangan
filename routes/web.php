@@ -22,6 +22,15 @@ Route::get('/test', function () {
     return view('login');
 });
 
+Route::get('/header', function () {
+    return view('dashboard/header');
+});
+
+Route::get('/sidebar', function () {
+    return view('dashboard/sidebar');
+});
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -30,6 +30,25 @@ Route::get('/sidebar', function () {
     return view('dashboard/sidebar');
 });
 
+Route::get('/pendapatan', function () {
+    return view('pendapatan/index');
+});
+
+Route::get('/pengeluaran', function () {
+    return view('pengeluaran/index');
+});
+
+Route::get('/hutang', function () {
+    return view('hutang/index');
+});
+
+Route::get('/karyawan', function () {
+    return view('karyawan/index');
+});
+
+Route::get('/laporan', function () {
+    return view('laporan/index');
+});
 
 
 Route::get('/dashboard', function () {

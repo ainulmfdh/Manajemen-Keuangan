@@ -31,16 +31,23 @@
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-500 hover:bg-blue-400 focus:outline-none transition ease-in-out duration-150"
                             onclick="document.getElementById('userDropdown').classList.toggle('hidden')"
                         >
-                            Nama User
+                            {{ Auth::user()->name }}
                             <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center ml-2">
                                 <img src="/assets/images/default.png" alt="" class="rounded-full w-8 h-8" />
                             </div>
                         </button>
 
                         <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg z-10">
-                            <a href="/profile" class="block px-4 py-2 text-sm hover:bg-gray-100 text-gray-800">Profile</a>
-                            <form method="POST" action="/logout">
-                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-gray-800">Log Out</button>
+                              <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile') }}
+                              </x-dropdown-link>
+                            <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                                <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                                </x-dropdown-link>
                             </form>
                         </div>
                     </div>

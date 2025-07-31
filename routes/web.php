@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PendapatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +31,9 @@ Route::get('/sidebar', function () {
     return view('dashboard/sidebar');
 });
 
-Route::get('/pendapatan', function () {
-    return view('pendapatan/index');
-});
+// Route::get('/pendapatan', function () {
+//     return view('pendapatan/index');
+// });
 
 Route::get('/pengeluaran', function () {
     return view('pengeluaran/index');
@@ -50,6 +51,12 @@ Route::get('/laporan', function () {
     return view('laporan/index');
 });
 
+
+// PENDAPATAN
+Route::middleware('auth')->group(function () {
+    Route::get('/pendapatan', [PendapatanController::class, 'index'])->name('pendapatan.index');
+    Route::post('/pendapatan', [PendapatanController::class, 'store'])->name('pendapatan.store');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

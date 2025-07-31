@@ -15,14 +15,14 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
    <body class="font-sans antialiased">
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen overflow-x-hidden">
         {{-- Sidebar --}}
         @include('dashboard.sidebar')
 
         {{-- Main Content --}}
-        <div class="flex-1 flex flex-col">
+        <div class="bg-slate-50 flex-1 overflow-x-hidden">
             {{-- Top Header (optional) --}}
-                @include('dashboard.header')
+            @include('dashboard.header')
 
             <main class="p-6">
                 {{ $slot }}

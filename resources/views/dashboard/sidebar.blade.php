@@ -11,9 +11,9 @@
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="flex">
+    {{-- <div class="flex min-h-screen"> --}}
         <!-- Sidebar -->
-        <aside class="w-64 bg-gray-50 p-4 min-h-screen">
+        <aside class="w-64 bg-gray-100 p-4">
             <!-- Logo -->
             <div class="mb-8">
                 <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
@@ -97,7 +97,7 @@
                 </nav>
             </div>
         </aside>
-    </div>
+    {{-- </div> --}}
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>

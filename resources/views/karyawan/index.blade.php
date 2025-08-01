@@ -1,4 +1,211 @@
 <x-app-layout>
-    <h1 class="text-2xl font-semibold mb-4">Halaman Karyawan</h1>
-    <!-- Konten pendapatan -->
+<div class="w-full max-w-5xl mx-auto">
+  <!-- Header dan Tombol Tambah -->
+  <div class="flex justify-between items-center mb-4">
+    <p class="font-bold text-2xl text-gray-600">DATA KARYAWAN</p>
+    <button
+      class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md"
+      onclick="document.getElementById('modalForm').classList.remove('hidden')">
+      <i class="fa-solid fa-plus"></i>
+      Tambah
+    </button>
+  </div>
+
+  <!-- Include Modal -->
+  @include('karyawan.form-tambah')
+  @include('karyawan.edit')
+  @include('karyawan.delete')
+
+  <!-- Tabel karyawan -->
+  <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+    <table class="w-full">
+      <thead>
+        <tr class="bg-blue-500 text-white">
+          <th class="px-6 py-4 text-left font-semibold text-lg">No</th>
+          <th class="px-6 py-4 text-left font-semibold text-lg">Nama</th>
+          <th class="px-6 py-4 text-left font-semibold text-lg">Posisi</th>
+          <th class="px-6 py-4 text-left font-semibold text-lg">Alamat</th>
+          <th class="px-6 py-4 text-left font-semibold text-lg">Umur</th>
+          <th class="px-6 py-4 text-left font-semibold text-lg">Kontak</th>
+          <th class="px-6 py-4 text-left font-semibold text-lg">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="font-semibold text-md text-gray-500">
+        @forelse ($karyawans as $index => $karyawan)
+        <tr class="bg-white border-b">
+          <td class="px-6 py-4 text-gray-700">{{ $karyawans->firstItem() + $index }}</td>
+          <td class="px-6 py-4 text-gray-700">{{ $karyawan->nama }}</td>
+          <td class="px-6 py-4 text-gray-700">{{ $karyawan->posisi }}</td>
+          <td class="px-6 py-4 text-gray-700">{{ $karyawan->alamat }}</td>
+          <td class="px-6 py-4 text-gray-700">{{ $karyawan->umur }}</td>
+          <td class="px-6 py-4 text-gray-700">{{ $karyawan->kontak }}</td>
+          <td class="px-6 py-4 text-gray-700">
+            <div class="flex gap-2">
+              <button 
+                type="button" 
+                data-id="{{ $karyawan->id }}" 
+                class="edit-button text-white bg-yellow-400 hover:bg-yellow-500 font-medium rounded-full text-sm px-5 py-2.5"
+              >
+                <i class="fas fa-edit mr-1"></i> Edit
+            </button>
+             <button 
+                type="button" 
+                data-id="{{ $karyawan->id }}" 
+                class="delete-button text-white bg-red-600 hover:bg-red-700 font-medium rounded-full text-sm px-5 py-2.5">
+                <i class="fas fa-trash-alt mr-1"></i> Hapus
+            </button>
+            </div>
+          </td>
+        </tr>
+        @empty
+        <tr>
+          <td colspan="6" class="px-6 py-4 text-center text-gray-500">Belum ada data</td>
+        </tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-6 flex justify-center">
+    {{ $karyawans->links() }}
+  </div>
+</div>
+
+{{-- ALERT SUKSES ADD DATA --}}
+@if (session('success'))
+<div id="alert-3" class="fixed top-6 right-6 z-50 flex items-center p-4 mb-4 text-white rounded-lg bg-green-500 animate-slide-in" role="alert">
+  <svg class="shrink-0 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  <div class="ms-3 text-sm font-medium">
+    {{ session('success') }}
+  </div>
+</div>
+
+{{-- ALERT SUCCES DELETE DATA --}}
+<div id="alert-delete-success" class="fixed top-6 right-6 z-50 flex items-center p-4 mb-4 text-white rounded-lg bg-green-500 animate-slide-in hidden" role="alert">
+  <svg class="shrink-0 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  <div class="ms-3 text-sm font-medium">
+    Data berhasil dihapus!
+  </div>
+</div>
+
+<script>
+  setTimeout(() => {
+    document.querySelector('#alert-3')?.remove();
+  }, 3000);
+
+</script>
+<style>
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-slide-in {
+    animation: slide-in 0.3s ease-out;
+  }
+</style>
+@endif
+
+
+{{-- GET DATA KARYAWAN UTK EDIT --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('modalFormEdit');
+    const editForm = document.getElementById('editKaryawanForm');
+    const editButtons = document.querySelectorAll('.edit-button');
+
+    // Fungsi untuk membuka modal dan mengisi data
+    const openEditModal = (id) => {
+        fetch(`/karyawan/${id}/edit`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Gagal mengambil data');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('edit-nama').value = data.nama;
+                document.getElementById('edit-posisi').value = data.posisi;
+                document.getElementById('edit-alamat').value = data.alamat;
+                document.getElementById('edit-umur').value = data.umur;
+                document.getElementById('edit-kontak').value = data.kontak;
+                editForm.action = `/karyawan/${id}`;
+                modal.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Tidak dapat memuat data untuk diedit.');
+            });
+    };
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const karyawanId = this.getAttribute('data-id');
+            openEditModal(karyawanId);
+        });
+    });
+
+    // Tutup modal jika tombol batal diklik
+    const cancelButton = modal.querySelector('button[type="button"]');
+    cancelButton.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+
+// DELETE DATA KARYAWAN
+    const deleteModal = document.getElementById('modalDelete');
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    let deleteId = null;
+
+    // Buka modal ketika tombol hapus di klik
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            deleteId = this.getAttribute('data-id');
+            deleteModal.classList.remove('hidden');
+        });
+    });
+
+    // Tutup modal
+    deleteModal.querySelector('.btn-cancel').addEventListener('click', () => {
+        deleteModal.classList.add('hidden');
+        deleteId = null;
+    });
+
+    // Konfirmasi hapus
+    confirmDeleteBtn.addEventListener('click', function () {
+    if (!deleteId) return;
+    fetch(`/karyawan/${deleteId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Tampilkan alert sukses hapus
+            const alert = document.getElementById('alert-delete-success');
+            alert.classList.remove('hidden');
+            setTimeout(() => {
+                alert.classList.add('hidden');
+                location.reload(); // reload setelah alert hilang
+            }, 2000); // tampilkan selama 2 detik
+        } else {
+            alert('Gagal menghapus data.');
+        }
+    })
+    .catch(error => {
+        alert('Terjadi kesalahan.');
+        console.error(error);
+    });
+  });
+});
+
+</script>
 </x-app-layout>

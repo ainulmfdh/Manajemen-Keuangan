@@ -31,10 +31,6 @@ Route::get('/sidebar', function () {
     return view('dashboard/sidebar');
 });
 
-// Route::get('/pendapatan', function () {
-//     return view('pendapatan/index');
-// });
-
 Route::get('/pengeluaran', function () {
     return view('pengeluaran/index');
 });
@@ -56,6 +52,9 @@ Route::get('/laporan', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/pendapatan', [PendapatanController::class, 'index'])->name('pendapatan.index');
     Route::post('/pendapatan', [PendapatanController::class, 'store'])->name('pendapatan.store');
+    Route::get('/pendapatan/{id}/edit', [PendapatanController::class, 'edit']);
+    Route::post('/pendapatan/{id}', [PendapatanController::class, 'update'])->name('pendapatan.update');
+    Route::delete('/pendapatan/{id}', [PendapatanController::class, 'destroy'])->name('pendapatan.destroy');
 });
 
 Route::get('/dashboard', function () {

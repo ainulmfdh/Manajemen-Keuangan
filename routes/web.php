@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PendapatanController;
 use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\KaryawanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,12 @@ use App\Http\Controllers\PengeluaranController;
 |
 */
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 // TEMPALTE DASHBOARD
@@ -25,20 +30,9 @@ Route::get('/test', function () {
     return view('login');
 });
 
-Route::get('/header', function () {
-    return view('dashboard/header');
-});
-
-Route::get('/sidebar', function () {
-    return view('dashboard/sidebar');
-});
 
 Route::get('/hutang', function () {
     return view('hutang/index');
-});
-
-Route::get('/karyawan', function () {
-    return view('karyawan/index');
 });
 
 Route::get('/laporan', function () {
@@ -62,6 +56,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengeluaran/{id}/edit', [PengeluaranController::class, 'edit']);
     Route::post('/pengeluaran/{id}', [PengeluaranController::class, 'update'])->name('pengeluaran.update');
     Route::delete('/pengeluaran/{id}', [PengeluaranController::class, 'destroy'])->name('pengeluaran.destroy');
+});
+
+// KARYAWAN
+Route::middleware('auth')->group(function () {
+    Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+    Route::post('/karyawan', [KaryawanController::class, 'store'])->name('karyawan.store');
+    Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit']);
+    Route::post('/karyawan/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
+    Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
 });
 
 

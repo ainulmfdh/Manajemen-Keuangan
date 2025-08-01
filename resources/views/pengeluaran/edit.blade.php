@@ -1,8 +1,8 @@
 <!-- form-edit -->
 <div id="modalFormEdit" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center hidden">
   <div class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 space-y-4">
-    <h2 class="text-2xl font-bold text-gray-700">Ubah Data Pemasukan</h2>
-    <form id="editPendapatanForm" method="POST" class="space-y-4">
+    <h2 class="text-2xl font-bold text-gray-700">Ubah Data Pengeluaran</h2>
+    <form id="editpengeluaranForm" method="POST" class="space-y-4">
         @csrf
             {{-- Untuk method PUT/PATCH, Laravel butuh method spoofing --}}
             @method('POST')

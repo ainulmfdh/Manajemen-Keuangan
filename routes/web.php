@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PendapatanController;
+use App\Http\Controllers\PengeluaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// TEMPALTE DASHBOARD
 Route::get('/test', function () {
     return view('login');
 });
@@ -29,10 +31,6 @@ Route::get('/header', function () {
 
 Route::get('/sidebar', function () {
     return view('dashboard/sidebar');
-});
-
-Route::get('/pengeluaran', function () {
-    return view('pengeluaran/index');
 });
 
 Route::get('/hutang', function () {
@@ -56,6 +54,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/pendapatan/{id}', [PendapatanController::class, 'update'])->name('pendapatan.update');
     Route::delete('/pendapatan/{id}', [PendapatanController::class, 'destroy'])->name('pendapatan.destroy');
 });
+
+// PENGELUARAN
+Route::middleware('auth')->group(function () {
+    Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran.index');
+    Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
+    Route::get('/pengeluaran/{id}/edit', [PengeluaranController::class, 'edit']);
+    Route::post('/pengeluaran/{id}', [PengeluaranController::class, 'update'])->name('pengeluaran.update');
+    Route::delete('/pengeluaran/{id}', [PengeluaranController::class, 'destroy'])->name('pengeluaran.destroy');
+});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -39,20 +39,22 @@ class PendapatanController extends Controller
         return response()->json($pendapatan);
     }
 
+    public function edit($id)
+    {
+        $pendapatan = Pendapatan::findOrFail($id);
+        return response()->json($pendapatan);
+    }
+
     public function update(Request $request, $id)
     {
-        $pendapatan = Pendapatan::where('user_id', Auth::id())->findOrFail($id);
-
-        $validated = $request->validate([
-            'tanggal' => 'required|date',
-            'jumlah' => 'required|numeric',
-            'kategori' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
+        $pendapatan = Pendapatan::findOrFail($id);
+        $pendapatan->update([
+            'tanggal'   => $request->tanggal,
+            'jumlah'    => $request->jumlah,
+            'kategori'  => $request->kategori,
+            'deskripsi' => $request->deskripsi,
         ]);
-
-        $pendapatan->update($validated);
-
-        return response()->json($pendapatan);
+        return redirect()->route('pendapatan.index')->with('success', 'Data pendapatan berhasil diupdate!');
     }
 
     public function destroy($id)
@@ -60,6 +62,7 @@ class PendapatanController extends Controller
         $pendapatan = Pendapatan::where('user_id', Auth::id())->findOrFail($id);
         $pendapatan->delete();
 
-        return response()->json(['message' => 'Data pendapatan berhasil dihapus.']);
+        return response()->json(['success' => true]);
+        return redirect()->route('pendapatan.index')->with('success', 'Data berhasil dihapus!');
     }
 }

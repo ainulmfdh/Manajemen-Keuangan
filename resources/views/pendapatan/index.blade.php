@@ -5,18 +5,16 @@
     <p class="font-bold text-2xl text-gray-600">DATA PEMASUKAN</p>
     <button
       class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md"
-      onclick="document.getElementById('modalForm').classList.remove('hidden')"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-      </svg>
+      onclick="document.getElementById('modalForm').classList.remove('hidden')">
+      <i class="fa-solid fa-plus"></i>
       Tambah
     </button>
   </div>
 
   <!-- Include Modal -->
   @include('pendapatan.form-tambah')
+  @include('pendapatan.edit')
+  @include('pendapatan.delete')
 
   <!-- Tabel Pendapatan -->
   <div class="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -41,12 +39,19 @@
           <td class="px-6 py-4 text-gray-700">{{ $pendapatan->deskripsi ?? '-' }}</td>
           <td class="px-6 py-4 text-gray-700">
             <div class="flex gap-2">
-              <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 font-medium rounded-full text-sm px-5 py-2.5">
+              <button 
+                type="button" 
+                data-id="{{ $pendapatan->id }}" 
+                class="edit-button text-white bg-yellow-400 hover:bg-yellow-500 font-medium rounded-full text-sm px-5 py-2.5"
+              >
                 <i class="fas fa-edit mr-1"></i> Edit
-              </button>
-              <button type="button" class="text-white bg-red-600 hover:bg-red-700 font-medium rounded-full text-sm px-5 py-2.5">
+            </button>
+             <button 
+                type="button" 
+                data-id="{{ $pendapatan->id }}" 
+                class="delete-button text-white bg-red-600 hover:bg-red-700 font-medium rounded-full text-sm px-5 py-2.5">
                 <i class="fas fa-trash-alt mr-1"></i> Hapus
-              </button>
+            </button>
             </div>
           </td>
         </tr>
@@ -65,6 +70,7 @@
   </div>
 </div>
 
+{{-- ALERT SUKSES ADD DATA --}}
 @if (session('success'))
 <div id="alert-3" class="fixed top-6 right-6 z-50 flex items-center p-4 mb-4 text-white rounded-lg bg-green-500 animate-slide-in" role="alert">
   <svg class="shrink-0 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -74,10 +80,22 @@
     {{ session('success') }}
   </div>
 </div>
+
+{{-- ALERT SUCCES DELETE DATA --}}
+<div id="alert-delete-success" class="fixed top-6 right-6 z-50 flex items-center p-4 mb-4 text-white rounded-lg bg-green-500 animate-slide-in hidden" role="alert">
+  <svg class="shrink-0 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  <div class="ms-3 text-sm font-medium">
+    Data berhasil dihapus!
+  </div>
+</div>
+
 <script>
   setTimeout(() => {
     document.querySelector('#alert-3')?.remove();
   }, 3000);
+
 </script>
 <style>
   @keyframes slide-in {
@@ -89,4 +107,102 @@
   }
 </style>
 @endif
+
+
+{{-- GET DATA PEMASUKAN UTK EDIT --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('modalFormEdit');
+    const editForm = document.getElementById('editPendapatanForm');
+    const editButtons = document.querySelectorAll('.edit-button');
+
+    // Fungsi untuk membuka modal dan mengisi data
+    const openEditModal = (id) => {
+        fetch(`/pendapatan/${id}/edit`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Gagal mengambil data');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('edit-tanggal').value = data.tanggal.split(' ')[0];
+                document.getElementById('edit-jumlah').value = data.jumlah;
+                document.getElementById('edit-kategori').value = data.kategori;
+                document.getElementById('edit-deskripsi').value = data.deskripsi;
+                editForm.action = `/pendapatan/${id}`;
+                modal.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Tidak dapat memuat data untuk diedit.');
+            });
+    };
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const pendapatanId = this.getAttribute('data-id');
+            openEditModal(pendapatanId);
+        });
+    });
+
+    // Tutup modal jika tombol batal diklik
+    const cancelButton = modal.querySelector('button[type="button"]');
+    cancelButton.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+
+// DELETE DATA PEMASUKAN
+    const deleteModal = document.getElementById('modalDelete');
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    let deleteId = null;
+
+    // Buka modal ketika tombol hapus di klik
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            deleteId = this.getAttribute('data-id');
+            deleteModal.classList.remove('hidden');
+        });
+    });
+
+    // Tutup modal
+    deleteModal.querySelector('.btn-cancel').addEventListener('click', () => {
+        deleteModal.classList.add('hidden');
+        deleteId = null;
+    });
+
+    // Konfirmasi hapus
+    confirmDeleteBtn.addEventListener('click', function () {
+    if (!deleteId) return;
+    fetch(`/pendapatan/${deleteId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Tampilkan alert sukses hapus
+            const alert = document.getElementById('alert-delete-success');
+            alert.classList.remove('hidden');
+            setTimeout(() => {
+                alert.classList.add('hidden');
+                location.reload(); // reload setelah alert hilang
+            }, 2000); // tampilkan selama 2 detik
+        } else {
+            alert('Gagal menghapus data.');
+        }
+    })
+    .catch(error => {
+        alert('Terjadi kesalahan.');
+        console.error(error);
+    });
+  });
+});
+
+</script>
 </x-app-layout>

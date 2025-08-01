@@ -48,9 +48,10 @@
                 <!-- Dropdown Content -->
                 <div
                     id="userDropdown"
-                    class="hidden absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg z-10"
+                    class="hidden absolute right-0 mt-2 w-40 bg-white text-black rounded-md shadow-lg z-10"
                 >
                     <x-dropdown-link :href="route('profile.edit')">
+                        <i class="fa-solid fa-user text-gray-300 ml-2 mr-2"></i>
                         {{ __('Profile') }}
                     </x-dropdown-link>
 
@@ -58,6 +59,7 @@
                         @csrf
                         <x-dropdown-link :href="route('logout')"
                             onclick="event.preventDefault(); this.closest('form').submit();">
+                            <i class="fa-solid fa-right-from-bracket text-gray-300 ml-2 mr-2"></i>
                             {{ __('Log Out') }}
                         </x-dropdown-link>
                     </form>

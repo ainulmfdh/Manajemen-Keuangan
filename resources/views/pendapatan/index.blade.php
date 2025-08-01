@@ -17,7 +17,7 @@
   @include('pendapatan.delete')
 
   <!-- Tabel Pendapatan -->
-  <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+ <div class="bg-white rounded-lg shadow-lg overflow-hidden">
     <table class="w-full">
       <thead>
         <tr class="bg-blue-500 text-white">
@@ -31,7 +31,7 @@
       </thead>
       <tbody class="font-semibold text-md text-gray-500">
         @forelse ($pendapatans as $index => $pendapatan)
-        <tr class="bg-white border-b">
+        <tr class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
           <td class="px-6 py-4 text-gray-700">{{ $pendapatans->firstItem() + $index }}</td>
           <td class="px-6 py-4 text-gray-700">{{ \Carbon\Carbon::parse($pendapatan->tanggal)->format('d-m-Y') }}</td>
           <td class="px-6 py-4 text-gray-700">Rp {{ number_format($pendapatan->jumlah, 0, ',', '.') }}</td>

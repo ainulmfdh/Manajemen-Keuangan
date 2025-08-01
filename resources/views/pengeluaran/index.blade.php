@@ -31,7 +31,7 @@
       </thead>
       <tbody class="font-semibold text-md text-gray-500">
         @forelse ($pengeluarans as $index => $pengeluaran)
-        <tr class="bg-white border-b">
+        <tr class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
           <td class="px-6 py-4 text-gray-700">{{ $pengeluarans->firstItem() + $index }}</td>
           <td class="px-6 py-4 text-gray-700">{{ \Carbon\Carbon::parse($pengeluaran->tanggal)->format('d-m-Y') }}</td>
           <td class="px-6 py-4 text-gray-700">Rp {{ number_format($pengeluaran->jumlah, 0, ',', '.') }}</td>

@@ -32,7 +32,7 @@
       </thead>
       <tbody class="font-semibold text-md text-gray-500">
         @forelse ($karyawans as $index => $karyawan)
-        <tr class="bg-white border-b">
+        <tr class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
           <td class="px-6 py-4 text-gray-700">{{ $karyawans->firstItem() + $index }}</td>
           <td class="px-6 py-4 text-gray-700">{{ $karyawan->nama }}</td>
           <td class="px-6 py-4 text-gray-700">{{ $karyawan->posisi }}</td>

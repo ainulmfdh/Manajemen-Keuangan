@@ -12,7 +12,7 @@
   </div>
 
   <!-- Include Modal -->
-  @include('pengeluaran.form-tambah')
+  @include('pengeluaran.add')
   @include('pengeluaran.edit')
   @include('pengeluaran.delete')
 
@@ -21,35 +21,35 @@
     <table class="w-full">
       <thead>
         <tr class="bg-blue-500 text-white">
-          <th class="px-6 py-4 text-left font-semibold text-lg">No</th>
-          <th class="px-6 py-4 text-left font-semibold text-lg">Tanggal</th>
-          <th class="px-6 py-4 text-left font-semibold text-lg">Jumlah</th>
-          <th class="px-6 py-4 text-left font-semibold text-lg">Kategori</th>
-          <th class="px-6 py-4 text-left font-semibold text-lg">Deskripsi</th>
-          <th class="px-6 py-4 text-left font-semibold text-lg">Aksi</th>
+          <th class="px-6 py-4 text-left font-semibold text-md">No</th>
+          <th class="px-6 py-4 text-left font-semibold text-md">Tanggal</th>
+          <th class="px-6 py-4 text-left font-semibold text-md">Jumlah</th>
+          <th class="px-6 py-4 text-left font-semibold text-md">Kategori</th>
+          <th class="px-6 py-4 text-left font-semibold text-md">Deskripsi</th>
+          <th class="px-6 py-4 text-left font-semibold text-md">Aksi</th>
         </tr>
       </thead>
-      <tbody class="font-semibold text-md text-gray-500">
+      <tbody class="font-semibold text-gray-500">
         @forelse ($pengeluarans as $index => $pengeluaran)
         <tr class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
-          <td class="px-6 py-4 text-gray-700">{{ $pengeluarans->firstItem() + $index }}</td>
-          <td class="px-6 py-4 text-gray-700">{{ \Carbon\Carbon::parse($pengeluaran->tanggal)->format('d-m-Y') }}</td>
-          <td class="px-6 py-4 text-gray-700">Rp {{ number_format($pengeluaran->jumlah, 0, ',', '.') }}</td>
-          <td class="px-6 py-4 text-gray-700">{{ $pengeluaran->kategori }}</td>
-          <td class="px-6 py-4 text-gray-700">{{ $pengeluaran->deskripsi ?? '-' }}</td>
-          <td class="px-6 py-4 text-gray-700">
+          <td class="px-6 py-4 text-gray-700 text-sm">{{ $pengeluarans->firstItem() + $index }}</td>
+          <td class="px-6 py-4 text-gray-700 text-sm">{{ \Carbon\Carbon::parse($pengeluaran->tanggal)->format('d-m-Y') }}</td>
+          <td class="px-6 py-4 text-gray-700 text-sm">Rp {{ number_format($pengeluaran->jumlah, 0, ',', '.') }}</td>
+          <td class="px-6 py-4 text-gray-700 text-sm">{{ $pengeluaran->kategori }}</td>
+          <td class="px-6 py-4 text-gray-700 text-sm">{{ $pengeluaran->deskripsi ?? '-' }}</td>
+          <td class="px-6 py-4 text-gray-700 text-sm">
             <div class="flex gap-2">
               <button 
                 type="button" 
                 data-id="{{ $pengeluaran->id }}" 
-                class="edit-button text-white bg-yellow-400 hover:bg-yellow-500 font-medium rounded-full text-sm px-5 py-2.5"
+                class="edit-button text-white bg-yellow-400 hover:bg-yellow-500 font-medium rounded-full text-xs px-5 py-2.5"
               >
                 <i class="fas fa-edit mr-1"></i> Edit
             </button>
              <button 
                 type="button" 
                 data-id="{{ $pengeluaran->id }}" 
-                class="delete-button text-white bg-red-600 hover:bg-red-700 font-medium rounded-full text-sm px-5 py-2.5">
+                class="delete-button text-white bg-red-600 hover:bg-red-700 font-medium rounded-full text-xs px-5 py-2.5">
                 <i class="fas fa-trash-alt mr-1"></i> Hapus
             </button>
             </div>

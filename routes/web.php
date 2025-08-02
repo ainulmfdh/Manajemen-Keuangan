@@ -6,6 +6,7 @@ use App\Http\Controllers\PendapatanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\HutangController;
+use App\Http\Controllers\LaporanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,15 +30,6 @@ Route::get('/', function () {
 // TEMPALTE DASHBOARD
 Route::get('/test', function () {
     return view('login');
-});
-
-
-// Route::get('/hutang', function () {
-//     return view('hutang/index');
-// });
-
-Route::get('/laporan', function () {
-    return view('laporan/index');
 });
 
 
@@ -75,6 +67,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/hutang/{id}/edit', [HutangController::class, 'edit']);
     Route::post('/hutang/{id}', [HutangController::class, 'update'])->name('hutang.update');
     Route::delete('/hutang/{id}', [HutangController::class, 'destroy'])->name('hutang.destroy');
+});
+
+// LAPORAN
+Route::middleware('auth')->group(function () {
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
+    Route::delete('/laporan/{id}', [LaporanController::class, 'destroy'])->name('hutang.destroy');
+    Route::get('/laporan/hitung-transaksi', [LaporanController::class, 'hitungTransaksi']);
+
+    // EXPORTS
+    Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
+    Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPDF'])->name('laporan.export.pdf');
 });
 
 

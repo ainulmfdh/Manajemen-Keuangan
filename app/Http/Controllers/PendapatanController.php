@@ -63,6 +63,5 @@ class PendapatanController extends Controller
         $pendapatan->delete();
 
         return response()->json(['success' => true]);
-        return redirect()->route('pendapatan.index')->with('success', 'Data berhasil dihapus!');
     }
 }

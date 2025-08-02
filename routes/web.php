@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PendapatanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\HutangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +32,9 @@ Route::get('/test', function () {
 });
 
 
-Route::get('/hutang', function () {
-    return view('hutang/index');
-});
+// Route::get('/hutang', function () {
+//     return view('hutang/index');
+// });
 
 Route::get('/laporan', function () {
     return view('laporan/index');
@@ -65,6 +66,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit']);
     Route::post('/karyawan/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
     Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
+});
+
+// HUTANG
+Route::middleware('auth')->group(function () {
+    Route::get('/hutang', [HutangController::class, 'index'])->name('hutang.index');
+    Route::post('/hutang', [HutangController::class, 'store'])->name('hutang.store');
+    Route::get('/hutang/{id}/edit', [HutangController::class, 'edit']);
+    Route::post('/hutang/{id}', [HutangController::class, 'update'])->name('hutang.update');
+    Route::delete('/hutang/{id}', [HutangController::class, 'destroy'])->name('hutang.destroy');
 });
 
 

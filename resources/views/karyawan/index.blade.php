@@ -32,7 +32,7 @@
       </thead>
       <tbody class="font-semibold text-gray-500">
         @forelse ($karyawans as $index => $karyawan)
-        <tr class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
+        <tr data-row-id="{{ $karyawan->id }}" class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
           <td class="px-6 py-4 text-gray-700 text-sm">{{ $karyawans->firstItem() + $index }}</td>
           <td class="px-6 py-4 text-gray-700 text-sm">{{ $karyawan->nama }}</td>
           <td class="px-6 py-4 text-gray-700 text-sm">{{ $karyawan->posisi }}</td>
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-// DELETE DATA KARYAWAN
+    // DELETE DATA PEMASUKAN (AJAX, TANPA RELOAD)
     const deleteModal = document.getElementById('modalDelete');
     const deleteButtons = document.querySelectorAll('.delete-button');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
@@ -178,33 +178,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Konfirmasi hapus
     confirmDeleteBtn.addEventListener('click', function () {
-    if (!deleteId) return;
-    fetch(`/karyawan/${deleteId}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Tampilkan alert sukses hapus
-            const alert = document.getElementById('alert-delete-success');
-            alert.classList.remove('hidden');
-            setTimeout(() => {
-                alert.classList.add('hidden');
-                location.reload(); // reload setelah alert hilang
-            }, 2000); // tampilkan selama 2 detik
-        } else {
-            alert('Gagal menghapus data.');
-        }
-    })
-    .catch(error => {
-        alert('Terjadi kesalahan.');
-        console.error(error);
+        if (!deleteId) return;
+        fetch(`/karyawan/${deleteId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Tampilkan alert sukses hapus
+                const alert = document.getElementById('alert-delete-success');
+                alert.classList.remove('hidden');
+
+                // Hapus elemen baris data dari DOM tanpa reload
+                const row = document.querySelector(`[data-row-id="${deleteId}"]`);
+                if (row) row.remove();
+
+                // Sembunyikan modal dan alert setelah 2 detik
+                setTimeout(() => {
+                    alert.classList.add('hidden');
+                    deleteModal.classList.add('hidden');
+                    deleteId = null;
+                }, 2000);
+            } else {
+                alert('Gagal menghapus data.');
+            }
+        })
+        .catch(error => {
+            alert('Terjadi kesalahan.');
+            console.error(error);
+        });
     });
-  });
 });
 
 </script>

@@ -216,12 +216,13 @@ class LaporanController extends Controller
                 $data = Hutang::where('user_id', $user_id)
                     ->whereYear('tanggal', $year)
                     ->whereMonth('tanggal', $month)
-                    ->get(['tanggal', 'jumlah', 'kategori'])
+                    ->get(['tanggal', 'jumlah', 'alasan', 'penghutang'])
                     ->map(function ($item) {
                         return [
-                            'tanggal' => $item->tanggal,
-                            'jumlah' => $item->jumlah,
-                            'kategori' => $item->kategori,
+                            'tanggal'    => $item->tanggal,
+                            'jumlah'     => $item->jumlah,
+                            'alasan'     => $item->alasan,
+                            'penghutang' => $item->penghutang,
                             'jenis' => 'hutang',
                         ];
                     });

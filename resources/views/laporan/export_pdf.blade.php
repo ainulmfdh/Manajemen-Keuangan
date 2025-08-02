@@ -79,7 +79,12 @@
                 <tr>
                     <th>Tanggal</th>
                     <th>Jenis</th>
-                    <th>Kategori</th>
+                    @if($jenis === 'hutang')
+                        <th>Alasan</th>
+                        <th>Penghutang</th>
+                    @else
+                        <th>Kategori</th>
+                    @endif
                     <th>Jumlah</th>
                 </tr>
             </thead>
@@ -94,17 +99,22 @@
                     <tr>
                         <td>{{ \Carbon\Carbon::parse($trx['tanggal'])->format('d/m/Y') }}</td>
                         <td>{{ ucfirst($trx['jenis']) }}</td>
-                        <td>{{ ucfirst($trx['kategori']) }}</td>
+                        @if($jenis === 'hutang')
+                            <td>{{ $trx['alasan'] }}</td>
+                            <td>{{ $trx['penghutang'] }}</td>
+                        @else
+                            <td>{{ ucfirst($trx['kategori']) }}</td>
+                        @endif
                         <td class="text-right">Rp {{ number_format($trx['jumlah'], 0, ',', '.') }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" style="text-align: center;">Tidak ada data transaksi.</td>
+                        <td colspan="{{ $jenis === 'hutang' ? 5 : 4 }}" style="text-align: center;">Tidak ada data transaksi.</td>
                     </tr>
                 @endforelse
                 @if(count($transaksis) > 0)
                     <tr>
-                        <td colspan="3" style="font-weight: bold; text-align: left;">Total</td>
+                        <td colspan="{{ $jenis === 'hutang' ? 4 : 3 }}" style="font-weight: bold; text-align: left;">Total</td>
                         <td class="text-right" style="font-weight: bold;">Rp {{ number_format($totalUang, 0, ',', '.') }}</td>
                     </tr>
                 @endif

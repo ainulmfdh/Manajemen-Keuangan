@@ -31,7 +31,7 @@
       </thead>
       <tbody class="font-semibold text-gray-500">
         @forelse ($pengeluarans as $index => $pengeluaran)
-        <tr class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
+        <tr data-row-id="{{ $pengeluaran->id }}" class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
           <td class="px-6 py-4 text-gray-700 text-sm">{{ $pengeluarans->firstItem() + $index }}</td>
           <td class="px-6 py-4 text-gray-700 text-sm">{{ \Carbon\Carbon::parse($pengeluaran->tanggal)->format('d-m-Y') }}</td>
           <td class="px-6 py-4 text-gray-700 text-sm">Rp {{ number_format($pengeluaran->jumlah, 0, ',', '.') }}</td>
@@ -153,59 +153,62 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-// DELETE DATA PENGELUARAN
-const deleteModal = document.getElementById('modalDelete');
-const deleteButtons = document.querySelectorAll('.delete-button');
-const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-let deleteId = null;
+// DELETE DATA PEMASUKAN (AJAX, TANPA RELOAD)
+    const deleteModal = document.getElementById('modalDelete');
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    let deleteId = null;
 
-// Buka modal ketika tombol hapus di klik
-deleteButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        deleteId = this.getAttribute('data-id');
-        deleteModal.classList.remove('hidden');
+    // Buka modal ketika tombol hapus di klik
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            deleteId = this.getAttribute('data-id');
+            deleteModal.classList.remove('hidden');
+        });
     });
-});
 
-// Tutup modal
-deleteModal.querySelector('.btn-cancel').addEventListener('click', () => {
-    deleteModal.classList.add('hidden');
-    deleteId = null;
-});
-
-// Konfirmasi hapus
-confirmDeleteBtn.addEventListener('click', function () {
-    if (!deleteId) return;
-    fetch(`/pengeluaran/${deleteId}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Accept': 'application/json',
-        }
-    })
-    .then(response => {
-        // Pastikan responsenya berupa JSON
-        if (!response.ok) throw new Error('Gagal menghapus data.');
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Tampilkan alert sukses hapus
-            const alert = document.getElementById('alert-delete-success');
-            alert.classList.remove('hidden');
-            setTimeout(() => {
-                alert.classList.add('hidden');
-                location.reload();
-            }, 2000); // tampilkan selama 2 detik
-        } else {
-            alert('Gagal menghapus data.');
-        }
-    })
-    .catch(error => {
-        alert('Gagal menghapus data.');
-        console.error(error);
+    // Tutup modal
+    deleteModal.querySelector('.btn-cancel').addEventListener('click', () => {
+        deleteModal.classList.add('hidden');
+        deleteId = null;
     });
-});
+
+    // Konfirmasi hapus
+    confirmDeleteBtn.addEventListener('click', function () {
+        if (!deleteId) return;
+        fetch(`/pengeluaran/${deleteId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Tampilkan alert sukses hapus
+                const alert = document.getElementById('alert-delete-success');
+                alert.classList.remove('hidden');
+
+                // Hapus elemen baris data dari DOM tanpa reload
+                const row = document.querySelector(`[data-row-id="${deleteId}"]`);
+                if (row) row.remove();
+
+                // Sembunyikan modal dan alert setelah 2 detik
+                setTimeout(() => {
+                    alert.classList.add('hidden');
+                    deleteModal.classList.add('hidden');
+                    deleteId = null;
+                }, 2000);
+            } else {
+                alert('Gagal menghapus data.');
+            }
+        })
+        .catch(error => {
+            alert('Terjadi kesalahan.');
+            console.error(error);
+        });
+    });
 });
 
 </script>

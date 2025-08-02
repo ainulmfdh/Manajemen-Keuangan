@@ -50,11 +50,10 @@
                     id="userDropdown"
                     class="hidden absolute right-0 mt-2 w-40 bg-white text-black rounded-md shadow-lg z-10"
                 >
-                    <x-dropdown-link :href="route('profile.edit')">
+                    <x-dropdown-link :href="route('profile.edit')" class="border-b">
                         <i class="fa-solid fa-user text-gray-300 ml-2 mr-2"></i>
                         {{ __('Profile') }}
                     </x-dropdown-link>
-
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <x-dropdown-link :href="route('logout')"

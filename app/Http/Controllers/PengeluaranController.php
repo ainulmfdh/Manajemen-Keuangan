@@ -8,11 +8,23 @@ use App\Models\Pengeluaran;
 
 class PengeluaranController extends Controller
 {
-    public function index()
+     public function index(Request $request)
     {
         $pengeluarans = Pengeluaran::where('user_id', Auth::id())
-            ->orderBy('created_at', 'asc') // data terbaru di bawah
-            ->paginate(10);
+        ->when($request->q, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kategori', 'like', '%' . $search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $search . '%')
+                  ->orWhere('jumlah', 'like', '%' . $search . '%');
+            });
+        })
+        ->orderBy('created_at', 'asc')
+        ->paginate(10);
+
+        if ($request->ajax()) {
+            return view('pengeluaran.table', compact('pengeluarans'))->render();
+        }
+
         return view('pengeluaran.index', compact('pengeluarans'));
     }
 

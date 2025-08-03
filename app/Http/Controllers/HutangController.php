@@ -8,11 +8,23 @@ use App\Models\Hutang;
 
 class HutangController extends Controller
 {
-     public function index()
+    public function index(Request $request)
     {
         $hutangs = Hutang::where('user_id', Auth::id())
-            ->orderBy('created_at', 'asc') // data terbaru di bawah
-            ->paginate(10);
+        ->when($request->q, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('jumlah', 'like', '%' . $search . '%')
+                  ->orWhere('alasan', 'like', '%' . $search . '%')
+                  ->orWhere('penghutang', 'like', '%' . $search . '%');
+            });
+        })
+        ->orderBy('created_at', 'asc')
+        ->paginate(10);
+
+        if ($request->ajax()) {
+            return view('hutang.table', compact('hutangs'))->render();
+        }
+
         return view('hutang.index', compact('hutangs'));
     }
 

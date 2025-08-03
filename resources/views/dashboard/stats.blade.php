@@ -27,8 +27,8 @@
       <div class="bg-white p-6 rounded-xl shadow-sm">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-3xl font-bold text-green-500">Rp 15.000.000</p>
-            <p class="text-gray-500 text-sm">Total Pemasukan</p>
+            <p class="text-3xl font-bold text-green-500">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
+            <p class="text-gray-500 mt-1 text-md font-semibold">Total Pemasukan</p>
           </div>
           <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
             <i class="fas fa-arrow-up text-green-500"></i>
@@ -40,8 +40,8 @@
       <div class="bg-white p-6 rounded-xl shadow-sm">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-3xl font-bold text-red-500">Rp 5.250.000</p>
-            <p class="text-gray-500 text-sm">Total Pengeluaran</p>
+            <p class="text-3xl font-bold text-red-500">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</p>
+            <p class="text-gray-500 mt-1 text-md font-semibold">Total Pengeluaran</p>
           </div>
           <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
             <i class="fas fa-arrow-down text-red-500"></i>
@@ -53,8 +53,8 @@
       <div class="bg-white p-6 rounded-xl shadow-sm">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-3xl font-bold text-blue-500">Rp 9.750.000</p>
-            <p class="text-gray-500 text-sm">Sisa Uang</p>
+            <p class="text-3xl font-bold text-blue-500">Rp {{ number_format($sisaUang, 0, ',', '.') }}</p>
+            <p class="text-gray-500 mt-1 text-md font-semibold">Sisa Uang</p>
           </div>
           <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
             <i class="fas fa-wallet text-blue-500"></i>
@@ -66,8 +66,8 @@
       <div class="bg-white p-6 rounded-xl shadow-sm">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-3xl font-bold text-yellow-500">Rp 2.500.000</p>
-            <p class="text-gray-500 text-sm">Total Hutang</p>
+            <p class="text-3xl font-bold text-yellow-500">Rp {{ number_format($totalHutang, 0, ',', '.') }}</p>
+            <p class="text-gray-500 mt-1 text-md font-semibold">Total Hutang</p>
           </div>
           <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
             <i class="fas fa-file-invoice-dollar text-yellow-500"></i>
@@ -85,7 +85,7 @@
       <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-green-500">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-gray-800">1.200.000</p>
+            <p class="text-2xl font-bold text-gray-800">{{ number_format($pendapatanHariIni, 0, ',', '.') }}</p>
             <p class="text-gray-500 text-md">Pemasukan hari ini</p>
           </div>
           <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
@@ -97,7 +97,7 @@
       <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-red-500">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-gray-800">4.000.000</p>
+            <p class="text-2xl font-bold text-gray-800">{{ number_format($pengeluaranHariIni, 0, ',', '.') }}</p>
             <p class="text-gray-500 text-md">Pengeluaran hari ini</p>
           </div>
           <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
@@ -109,7 +109,7 @@
       <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-yellow-500">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-gray-800">200.000</p>
+            <p class="text-2xl font-bold text-gray-800">{{ number_format($hutangHariIni, 0, ',', '.') }}</p>
             <p class="text-gray-500 text-md">Hutang hari ini</p>
           </div>
           <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -121,7 +121,7 @@
       <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-500">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-gray-800">2</p>
+            <p class="text-2xl font-bold text-gray-800">{{ $jumlahKaryawan }}</p>
             <p class="text-gray-500 text-md">Karyawan</p>
           </div>
           <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
@@ -136,41 +136,25 @@
       
       <!-- Bar Chart -->
       <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">
-          The number of applied and left students per month
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+          Perbandingan Data Tahun {{ date('Y') }} 
         </h3>
-        <div class="flex items-center space-x-4 mb-4">
-          <div class="flex items-center space-x-2">
-            <div class="w-3 h-3 bg-orange-400 rounded-full"></div>
-            <span class="text-sm text-gray-600">Applied</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span class="text-sm text-gray-600">Left</span>
-          </div>
-        </div>
         <canvas id="barChart" width="400" height="200"></canvas>
       </div>
 
       <!-- Pie Chart -->
       <div class="bg-white p-6 rounded-xl shadow-sm">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Students by type of studying</h3>
-        <div class="flex justify-center mb-4">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Perbandingan</h3>
+        <div class="flex justify-center mt-4 mb-4">
           <canvas id="pieChart" width="200" height="200"></canvas>
         </div>
-        <div class="grid grid-cols-3 gap-2 text-sm">
-          <div class="flex items-center space-x-2"><div class="w-3 h-3 bg-purple-500 rounded-full"></div><span class="text-gray-600">Red</span></div>
-          <div class="flex items-center space-x-2"><div class="w-3 h-3 bg-blue-400 rounded-full"></div><span class="text-gray-600">Blue</span></div>
-          <div class="flex items-center space-x-2"><div class="w-3 h-3 bg-yellow-400 rounded-full"></div><span class="text-gray-600">Yellow</span></div>
-          <div class="flex items-center space-x-2"><div class="w-3 h-3 bg-green-400 rounded-full"></div><span class="text-gray-600">Green</span></div>
-          <div class="flex items-center space-x-2"><div class="w-3 h-3 bg-teal-400 rounded-full"></div><span class="text-gray-600">Purple</span></div>
-        </div>
       </div>
+      
     </div>
 
   </main>
 
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     // DATE FORMAT
     const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -189,24 +173,95 @@
     document.getElementById("tanggal-hari-ini").textContent = hasilFormat;
 
 
-    // PIE CHART
-    const pieCtx = document.getElementById('pieChart').getContext('2d');
-    new Chart(pieCtx, {
-      type: 'doughnut',
-      data: {
-        datasets: [{
-          data: [25, 20, 20, 20, 15],
-          backgroundColor: ['#8b5cf6', '#60a5fa', '#fbbf24', '#34d399', '#14b8a6'],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        cutout: '60%'
-      }
+    // PIE CHART PERBANDINGAN PEMASUKAN, PENGELUARAN & SISA UANG
+    const pieChart = document.getElementById('pieChart').getContext('2d');
+    new Chart(pieChart, {
+        type: 'doughnut', 
+        data: {
+            labels: ['Pemasukan', 'Pengeluaran', 'Sisa Uang'],
+            datasets: [{
+                data: [
+                    {{ $totalPendapatan }},
+                    {{ $totalPengeluaran }},
+                    {{ $sisaUang }}
+                ],
+                backgroundColor: [
+                    '#22c55e', // green-500
+                    '#ef4444', // red-500
+                    '#3b82f6'  // blue-500
+                ],
+                borderColor: '#ffffff', // Putih di antaranya
+                borderWidth: 4,
+                hoverOffset: 12
+            }]
+        },
+        options: {
+            cutout: '65%', // lubang bolong tengah
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false 
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            let value = context.parsed || 0;
+                            return `${label}: Rp${value.toLocaleString('id-ID')}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+  // BAR CHART PERBANDINGAN PENDAPATAN DAN PENGELUARAN
+  fetch("{{ route('dashboard.chart-data') }}")
+    .then(res => res.json())
+    .then(data => {
+      const ctx = document.getElementById('barChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.labels,
+          datasets: [
+            {
+              label: 'Pendapatan',
+              data: data.pendapatan,
+              backgroundColor: 'rgba(34,197,94,0.7)',
+              borderRadius: 6
+            },
+            {
+              label: 'Pengeluaran',
+              data: data.pengeluaran,
+              backgroundColor: 'rgba(239,68,68,0.7)',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              callbacks: {
+                label: context => `${context.dataset.label}: Rp ${context.raw.toLocaleString('id-ID')}`
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: value => 'Rp ' + value.toLocaleString('id-ID')
+              }
+            }
+          }
+        }
+      });
     });
   </script>
+
 </body>
 </html>

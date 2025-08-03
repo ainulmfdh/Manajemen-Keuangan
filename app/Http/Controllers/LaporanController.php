@@ -9,7 +9,7 @@ use App\Models\Pendapatan;
 use App\Models\Pengeluaran;
 use App\Models\Hutang;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\LaporanExport;
+use App\Exports\ExportLaporan;
 use PDF;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -161,11 +161,6 @@ class LaporanController extends Controller
         return response()->json(['success' => true]);
     }
 
-    // EXPORTS EXCEL
-    public function exportExcel()
-    {
-        return Excel::download(new LaporanExport, 'laporan.xlsx');
-    }
 
     // EXPORTS PDF
    public function exportPDF(Request $request)
@@ -240,4 +235,75 @@ class LaporanController extends Controller
 
         return $pdf->download("laporan_{$jenis}_{$bulan}.pdf");
     }
+
+    // EXPORTS LAPORAN EXCEL
+   public function exportExcel(Request $request)
+    {
+        $user_id = auth()->id();
+        $jenis = $request->input('jenis');
+        $bulan = $request->input('bulan');
+
+        if (!$jenis || !$bulan) {
+            return back()->with('error', 'Jenis dan bulan harus dipilih.');
+        }
+
+        [$year, $month] = explode('-', $bulan);
+
+        switch ($jenis) {
+            case 'pendapatan':
+                $data = Pendapatan::where('user_id', $user_id)
+                    ->whereMonth('tanggal', $month)
+                    ->whereYear('tanggal', $year)
+                    ->get(['tanggal', 'jumlah', 'kategori'])
+                    ->map(function ($item) {
+                        return [
+                            'tanggal' => $item->tanggal,
+                            'jumlah' => $item->jumlah,
+                            'kategori' => $item->kategori,
+                            'jenis' => 'pendapatan',
+                        ];
+                    });
+                break;
+
+            case 'pengeluaran':
+                $data = Pengeluaran::where('user_id', $user_id)
+                    ->whereYear('tanggal', $year)
+                    ->whereMonth('tanggal', $month)
+                    ->get(['tanggal', 'jumlah', 'kategori'])
+                    ->map(function ($item) {
+                        return [
+                            'tanggal' => $item->tanggal,
+                            'jumlah' => $item->jumlah,
+                            'kategori' => $item->kategori,
+                            'jenis' => 'pengeluaran',
+                        ];
+                    });
+                break;
+
+            case 'hutang':
+                $data = Hutang::where('user_id', $user_id)
+                    ->whereYear('tanggal', $year)
+                    ->whereMonth('tanggal', $month)
+                    ->get(['tanggal', 'jumlah', 'alasan', 'penghutang'])
+                    ->map(function ($item) {
+                        return [
+                            'tanggal' => $item->tanggal,
+                            'jumlah' => $item->jumlah,
+                            'alasan' => $item->alasan,
+                            'penghutang' => $item->penghutang,
+                            'jenis' => 'hutang',
+                        ];
+                    });
+                break;
+
+            default:
+                $data = collect();
+        }
+
+        $export = new ExportLaporan($data, $jenis);
+        $filename = "laporan_{$jenis}_{$bulan}.xlsx";
+
+        return Excel::download($export, $filename);
+    }
+
 }

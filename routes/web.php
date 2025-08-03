@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/hitung-transaksi', [LaporanController::class, 'hitungTransaksi']);
 
     // EXPORTS
-    Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
+    Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
     Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPDF'])->name('laporan.export.pdf');
 });
 

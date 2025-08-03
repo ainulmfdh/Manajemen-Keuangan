@@ -1,15 +1,42 @@
 <x-app-layout>
 <div class="w-full max-w-5xl mx-auto">
-  <!-- Header dan Tombol Tambah -->
-  <div class="flex justify-between items-center mb-4">
-    <p class="font-bold text-2xl text-gray-600">DATA LAPORAN</p>
-    <button
-      class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md"
-      onclick="document.getElementById('modalForm').classList.remove('hidden')">
-      <i class="fa-solid fa-plus"></i>
-      Tambah
-    </button>
-  </div>
+   <!-- Header dan Tombol Tambah -->
+ <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-3 gap-4">
+  <!-- Judul -->
+  <p class="font-bold text-2xl text-gray-700">DATA PEMASUKAN</p>
+
+  <!-- Form Pencarian -->
+    <form id="searchForm" class="relative w-full md:w-1/2">
+      <label for="search" class="sr-only">Cari</label>
+      <div class="relative">
+        <!-- Icon Search (kiri) -->
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+          </svg>
+        </div>
+
+        <!-- Input Search -->
+        <input
+          type="search"
+          name="q"
+          id="search"
+          class="block w-full pl-10 pr-10 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Cari pemasukan...">
+
+      </div>
+    </form>
+
+
+  <!-- Tombol Tambah -->
+  <button
+    class="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md"
+    onclick="document.getElementById('modalForm').classList.remove('hidden')">
+    <i class="fa-solid fa-plus"></i>
+    Tambah
+  </button>
+</div>
 
   <!-- Include Modal -->
   @include('laporan.add')
@@ -17,58 +44,8 @@
   @include('laporan.delete')
 
   <!-- Tabel laporan -->
-  <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-    <table class="w-full">
-      <thead>
-        <tr class="bg-blue-500 text-white">
-          <th class="px-6 py-4 text-left font-semibold text-md">No</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Nama</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Bulan</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Tranksaksi</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Total Uang</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Aksi</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Download</th>
-        </tr>
-      </thead>
-      <tbody class="font-semibold text-gray-500">
-        @forelse ($laporans as $index => $laporan)
-        <tr data-row-id="{{ $laporan->id }}" class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
-          <td class="px-6 py-4 text-gray-700 text-sm">{{ $laporans->firstItem() + $index }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">{{ ucfirst($laporan->nama) }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">{{ \Carbon\Carbon::createFromFormat('Y-m', $laporan->bulan)->translatedFormat('F Y') }}</td>
-          <td class="px-6 py-4 text-gray-700 text-center text-sm">{{ $laporan->jumlah_transaksi }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">Rp {{ number_format($laporan->total_uang, 2, ',', '.') }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">
-             <div class="flex gap-2">
-             <button 
-                type="button" 
-                data-id="{{ $laporan->id }}" 
-                class="delete-button text-white bg-red-600 hover:bg-red-700 font-medium rounded-full text-xs px-4 py-2">
-                <i class="fas fa-trash-alt mr-1"></i> Hapus
-            </button>
-            </div>
-          <td class="px-6 py-4 text-gray-700 text-sm">
-           <div class="flex gap-2">
-               <a href="{{ route('laporan.export.excel', ['jenis' => $laporan->nama, 'bulan' => $laporan->bulan]) }}"
-                  class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full text-sm">
-                  <i class="fas fa-file-excel mr-1"></i> Excel
-              </a>
-                <a href="{{ route('laporan.export.pdf', ['jenis' => $laporan->nama, 'bulan' => $laporan->bulan]) }}"
-                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm">
-                    <i class="fas fa-file-pdf mr-1"></i> PDF
-                </a>
-
-            </div>
-
-          </td>
-        </tr>
-        @empty
-        <tr>
-          <td colspan="6" class="px-6 py-4 text-center text-gray-500">Belum ada data</td>
-        </tr>
-        @endforelse
-      </tbody>
-    </table>
+  <div id="tableContainer" class="bg-white rounded-lg shadow-lg overflow-hidden">
+    @include('laporan.table')
   </div>
 
   <!-- Pagination -->
@@ -215,6 +192,35 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Terjadi kesalahan.');
             console.error(error);
         });
+    });
+
+     // LIVE SEARCH
+    const searchInput = document.getElementById('search');
+    const tableContainer = document.getElementById('tableContainer');
+
+    if (!searchInput || !tableContainer) {
+      console.error('Elemen tidak ditemukan. Pastikan ada ID #search dan #tableContainer.');
+      return;
+    }
+
+    // Cegah reload jika masih dalam form
+    searchInput.form.addEventListener('submit', function (e) {
+      e.preventDefault();
+    });
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value;
+
+      fetch(`?q=${query}`, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.text())
+      .then(data => {
+        tableContainer.innerHTML = data;
+      })
+      .catch(error => console.error('Live Search Error:', error));
     });
 });
 

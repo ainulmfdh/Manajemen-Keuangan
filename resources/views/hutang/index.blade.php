@@ -1,15 +1,42 @@
 <x-app-layout>
 <div class="w-full max-w-5xl mx-auto">
   <!-- Header dan Tombol Tambah -->
-  <div class="flex justify-between items-center mb-4">
-    <p class="font-bold text-2xl text-gray-600">DATA HUTANG</p>
-    <button
-      class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md"
-      onclick="document.getElementById('modalForm').classList.remove('hidden')">
-      <i class="fa-solid fa-plus"></i>
-      Tambah
-    </button>
-  </div>
+ <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-3 gap-4">
+  <!-- Judul -->
+  <p class="font-bold text-2xl text-gray-700">DATA HUTANG</p>
+
+  <!-- Form Pencarian -->
+    <form id="searchForm" class="relative w-full md:w-1/2">
+      <label for="search" class="sr-only">Cari</label>
+      <div class="relative">
+        <!-- Icon Search (kiri) -->
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+          </svg>
+        </div>
+
+        <!-- Input Search -->
+        <input
+          type="search"
+          name="q"
+          id="search"
+          class="block w-full pl-10 pr-10 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Cari pemasukan...">
+
+      </div>
+    </form>
+
+
+  <!-- Tombol Tambah -->
+  <button
+    class="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md"
+    onclick="document.getElementById('modalForm').classList.remove('hidden')">
+    <i class="fa-solid fa-plus"></i>
+    Tambah
+  </button>
+</div>
 
   <!-- Include Modal -->
   @include('hutang.add')
@@ -17,51 +44,8 @@
   @include('hutang.delete')
 
   <!-- Tabel hutang -->
- <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-    <table class="w-full">
-      <thead>
-        <tr class="bg-blue-500 text-white">
-          <th class="px-6 py-4 text-left font-semibold text-md">No</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Tanggal</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Jumlah</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Alasan</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Penghutang</th>
-          <th class="px-6 py-4 text-left font-semibold text-md">Aksi</th>
-        </tr>
-      </thead>
-      <tbody class="font-semibold text-gray-500">
-        @forelse ($hutangs as $index => $hutang)
-        <tr data-row-id="{{ $hutang->id }}" class="bg-white border-b hover:bg-gray-100 transition-colors duration-150">
-          <td class="px-6 py-4 text-gray-700 text-sm">{{ $hutangs->firstItem() + $index }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">{{ \Carbon\Carbon::parse($hutang->tanggal)->format('d-m-Y') }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">Rp {{ number_format($hutang->jumlah, 0, ',', '.') }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">{{ $hutang->alasan }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">{{ $hutang->penghutang }}</td>
-          <td class="px-6 py-4 text-gray-700 text-sm">
-            <div class="flex gap-2">
-              <button 
-                type="button" 
-                data-id="{{ $hutang->id }}" 
-                class="edit-button text-white bg-yellow-400 hover:bg-yellow-500 font-medium rounded-full text-xs px-5 py-2.5"
-              >
-                <i class="fas fa-edit mr-1"></i> Edit
-            </button>
-             <button 
-                type="button" 
-                data-id="{{ $hutang->id }}" 
-                class="delete-button text-white bg-red-600 hover:bg-red-700 font-medium rounded-full text-xs px-5 py-2.5">
-                <i class="fas fa-trash-alt mr-1"></i> Hapus
-            </button>
-            </div>
-          </td>
-        </tr>
-        @empty
-        <tr>
-          <td colspan="6" class="px-6 py-4 text-center text-gray-500">Belum ada data</td>
-        </tr>
-        @endforelse
-      </tbody>
-    </table>
+ <div id="tableContainer" class="bg-white rounded-lg shadow-lg overflow-hidden">
+     @include('hutang.table')
   </div>
 
   <!-- Pagination -->
@@ -208,6 +192,35 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Terjadi kesalahan.');
             console.error(error);
         });
+    });
+
+    // LIVE SEARCH
+    const searchInput = document.getElementById('search');
+    const tableContainer = document.getElementById('tableContainer');
+
+    if (!searchInput || !tableContainer) {
+      console.error('Elemen tidak ditemukan. Pastikan ada ID #search dan #tableContainer.');
+      return;
+    }
+
+    // Cegah reload jika masih dalam form
+    searchInput.form.addEventListener('submit', function (e) {
+      e.preventDefault();
+    });
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value;
+
+      fetch(`?q=${query}`, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.text())
+      .then(data => {
+        tableContainer.innerHTML = data;
+      })
+      .catch(error => console.error('Live Search Error:', error));
     });
 });
 

@@ -8,11 +8,23 @@ use App\Models\Pendapatan;
 
 class PendapatanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $pendapatans = Pendapatan::where('user_id', Auth::id())
-            ->orderBy('created_at', 'asc') // data terbaru di bawah
-            ->paginate(10);
+        ->when($request->q, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kategori', 'like', '%' . $search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $search . '%')
+                  ->orWhere('jumlah', 'like', '%' . $search . '%');
+            });
+        })
+        ->orderBy('created_at', 'asc')
+        ->paginate(10);
+
+        if ($request->ajax()) {
+            return view('pendapatan.table', compact('pendapatans'))->render();
+        }
+
         return view('pendapatan.index', compact('pendapatans'));
     }
 

@@ -22,10 +22,16 @@ class LaporanController extends Controller
         $bulan = $request->bulan ?? now()->format('Y-m');
         $user_id = Auth::id();
 
-       $laporans = Laporan::where('user_id', $user_id)
-        ->orderBy('bulan', 'asc')
-        ->paginate(5);
-
+        $laporans = Laporan::where('user_id', $user_id)
+            ->when($request->q, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', '%' . $search . '%')
+                    ->orWhere('bulan', 'like', '%' . $search . '%')
+                    ->orWhere('total_uang', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('bulan', 'asc')
+            ->paginate(5);
 
         // Data detail per bulan
         $Pendapatan = Pendapatan::where('user_id', $user_id)
@@ -38,8 +44,13 @@ class LaporanController extends Controller
             ->whereMonth('tanggal', substr($bulan, 5, 2))
             ->whereYear('tanggal', substr($bulan, 0, 4))->get();
 
+        if ($request->ajax()) {
+            return view('laporan.table', compact('laporans'))->render();
+        }
+
         return view('laporan.index', compact('laporans', 'Pendapatan', 'pengeluaran', 'hutang', 'bulan'));
     }
+
 
     // TAMBAH/BUAT LAPORAN
     public function store(Request $request)

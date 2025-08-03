@@ -47,10 +47,10 @@
         }
         .footer {
             position: fixed;
-            bottom: 20px;
+            bottom: 10px;
             font-size: 10px;
             width: 100%;
-            text-align: center;
+            text-align: right;
         }
         .border {
             border-bottom: solid 2px #919191;
@@ -124,7 +124,7 @@
 
     {{-- Footer --}}
     <div class="footer">
-        Dicetak tanggal: {{ \Carbon\Carbon::now()->format('d M Y, H:i') }}
+        Dicetak pada tanggal: {{ \Carbon\Carbon::now()->format('d M Y, H:i') }}
     </div>
 
 </body>

@@ -49,9 +49,10 @@
             </div>
           <td class="px-6 py-4 text-gray-700 text-sm">
            <div class="flex gap-2">
-                <a href="{{ route('laporan.export.excel') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full text-sm">
-                    <i class="fas fa-file-excel mr-1"></i>  Excel
-                </a>
+               <a href="{{ route('laporan.export.excel', ['jenis' => $laporan->nama, 'bulan' => $laporan->bulan]) }}"
+                  class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full text-sm">
+                  <i class="fas fa-file-excel mr-1"></i> Excel
+              </a>
                 <a href="{{ route('laporan.export.pdf', ['jenis' => $laporan->nama, 'bulan' => $laporan->bulan]) }}"
                     class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm">
                     <i class="fas fa-file-pdf mr-1"></i> PDF

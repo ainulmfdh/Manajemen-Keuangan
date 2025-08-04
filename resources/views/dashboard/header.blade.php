@@ -18,12 +18,12 @@
         <h1 class="text-xl font-semibold">Finance Dashboard</h1>
 
         <div class="flex items-center space-x-4">
-            <!-- Search -->
+            {{-- <!-- Search -->
             <input
                 type="text"
                 placeholder="Search..."
                 class="bg-blue-500 text-white placeholder-white border border-white px-4 py-2 rounded-lg focus:outline-none focus:bg-blue-400 focus:border-white transition-colors duration-200"
-            />
+            /> --}}
 
             <!-- Notification Icon -->
             <div

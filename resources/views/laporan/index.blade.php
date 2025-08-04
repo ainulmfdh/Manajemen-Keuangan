@@ -3,7 +3,7 @@
    <!-- Header dan Tombol Tambah -->
  <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-3 gap-4">
   <!-- Judul -->
-  <p class="font-bold text-2xl text-gray-700">DATA PEMASUKAN</p>
+  <p class="font-bold text-2xl text-gray-700">DATA LAPORAN</p>
 
   <!-- Form Pencarian -->
     <form id="searchForm" class="relative w-full md:w-1/2">

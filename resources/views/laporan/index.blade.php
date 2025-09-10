@@ -23,10 +23,16 @@
           name="q"
           id="search"
           class="block w-full pl-10 pr-10 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Cari pemasukan...">
+          placeholder="Cari laporan...">
 
       </div>
     </form>
+
+<a href="{{ route('laporan.riwayat') }}"
+   class="w-full md:w-auto flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md">
+   <i class="fa-solid fa-database"></i>
+   Data Terbesar
+</a>
 
 
   <!-- Tombol Tambah -->

@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
     Route::delete('/laporan/{id}', [LaporanController::class, 'destroy'])->name('hutang.destroy');
     Route::get('/laporan/hitung-transaksi', [LaporanController::class, 'hitungTransaksi']);
+    Route::get('/riwayat', [LaporanController::class, 'riwayat'])->name('laporan.riwayat');
 
     // EXPORTS
     Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');

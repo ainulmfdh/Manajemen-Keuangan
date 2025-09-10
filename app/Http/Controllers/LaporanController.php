@@ -317,4 +317,45 @@ class LaporanController extends Controller
         return Excel::download($export, $filename);
     }
 
+
+    public function riwayat(Request $request)
+    {
+        $bulan = $request->bulan ?? now()->format('Y-m');
+        $user_id = Auth::id();
+
+        $laporans = Laporan::where('user_id', $user_id)
+            ->when($request->q, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', '%' . $search . '%')
+                    ->orWhere('bulan', 'like', '%' . $search . '%')
+                    ->orWhere('total_uang', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('bulan', 'asc')
+            ->paginate(10);
+
+        // Data detail per bulan
+        $Pendapatan = Pendapatan::where('user_id', $user_id)
+            ->whereMonth('tanggal', substr($bulan, 5, 2))
+            ->whereYear('tanggal', substr($bulan, 0, 4))->get();
+        $pengeluaran = Pengeluaran::where('user_id', $user_id)
+            ->whereMonth('tanggal', substr($bulan, 5, 2))
+            ->whereYear('tanggal', substr($bulan, 0, 4))->get();
+        $hutang = Hutang::where('user_id', $user_id)
+            ->whereMonth('tanggal', substr($bulan, 5, 2))
+            ->whereYear('tanggal', substr($bulan, 0, 4))->get();
+
+        if ($request->ajax()) {
+            return view('laporan.table', compact('laporans'))->render();
+        }
+
+        // Antrian prioritas: ambil laporan dengan total_uang terbesar
+        $queue = $laporans->sortByDesc('total_uang')->values();
+
+        // Ambil 5 teratas
+        $topLaporans = $queue->take(5);
+
+        return view('laporan.riwayat', compact('laporans', 'Pendapatan', 'pengeluaran', 'hutang', 'bulan'));
+    }
+
 }

@@ -14,7 +14,7 @@
 
 <body>
     <!-- Header -->
-    <header class="bg-blue-600 w-full text-white p-4 flex items-center justify-between shadow-md">
+    <header class="bg-blue-600 w-full text-white p-2 flex items-center justify-between shadow-md">
         <h1 class="text-xl font-semibold">Finance Dashboard</h1>
 
         <div class="flex items-center space-x-4">

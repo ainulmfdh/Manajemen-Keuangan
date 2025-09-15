@@ -1,3 +1,4 @@
+<div class="overflow-x-auto">
  <table class="w-full">
       <thead>
         <tr class="bg-blue-500 text-white">
@@ -49,3 +50,4 @@
         @endforelse
       </tbody>
     </table>
+</div>

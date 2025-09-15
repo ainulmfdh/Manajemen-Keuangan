@@ -11,14 +11,14 @@
   <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
   
 </head>
-<body class="bg-gray-100 overflow-x-hidden">
+<body class="bg-gray-200 overflow-x-hidden">
 
-  <main class="p-6 bg-gray-50 flex-1 min-h-screen w-full overflow-hidden">
+  <main class="p-6 flex-1 min-h-screen w-full overflow-hidden">
     
     <!-- Stats Cards Atas -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       <!-- Total Pemasukan -->
-      <div class="bg-white p-6 rounded-xl shadow-sm">
+      <div class="bg-white p-6 rounded-xl shadow-md">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-3xl font-bold text-green-500">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
@@ -31,7 +31,7 @@
       </div>
 
       <!-- Total Pengeluaran -->
-      <div class="bg-white p-6 rounded-xl shadow-sm">
+      <div class="bg-white p-6 rounded-xl shadow-md">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-3xl font-bold text-red-500">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</p>
@@ -44,7 +44,7 @@
       </div>
 
       <!-- Sisa Uang -->
-      <div class="bg-white p-6 rounded-xl shadow-sm">
+      <div class="bg-white p-6 rounded-xl shadow-md">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-3xl font-bold text-blue-500">Rp {{ number_format($sisaUang, 0, ',', '.') }}</p>
@@ -57,7 +57,7 @@
       </div>
 
       <!-- Total Hutang -->
-      <div class="bg-white p-6 rounded-xl shadow-sm">
+      <div class="bg-white p-6 rounded-xl shadow-md">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-3xl font-bold text-yellow-500">Rp {{ number_format($totalHutang, 0, ',', '.') }}</p>
@@ -76,7 +76,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-green-500">
+      <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-2xl font-bold text-gray-800">{{ number_format($pendapatanHariIni, 0, ',', '.') }}</p>
@@ -88,7 +88,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-red-500">
+      <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-red-500">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-2xl font-bold text-gray-800">{{ number_format($pengeluaranHariIni, 0, ',', '.') }}</p>
@@ -100,7 +100,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-yellow-500">
+      <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-yellow-500">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-2xl font-bold text-gray-800">{{ number_format($hutangHariIni, 0, ',', '.') }}</p>
@@ -112,7 +112,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-500">
+      <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-2xl font-bold text-gray-800">{{ $jumlahKaryawan }}</p>
@@ -129,7 +129,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
       
       <!-- Bar Chart -->
-      <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm">
+      <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">
           Perbandingan Data Tahun {{ date('Y') }} 
         </h3>
@@ -137,7 +137,7 @@
       </div>
 
       <!-- Pie Chart -->
-      <div class="bg-white p-6 rounded-xl shadow-sm">
+      <div class="bg-white p-6 rounded-xl shadow-md">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Perbandingan</h3>
         <div class="flex justify-center mt-4 mb-4">
           <canvas id="pieChart" width="200" height="200"></canvas>

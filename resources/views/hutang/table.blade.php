@@ -1,4 +1,5 @@
-<table class="w-full">
+<div class="overflow-x-auto">
+  <table class="w-full">
       <thead>
         <tr class="bg-blue-500 text-white">
           <th class="px-6 py-4 text-left font-semibold text-md">No</th>
@@ -42,3 +43,4 @@
         @endforelse
       </tbody>
     </table>
+</div>
